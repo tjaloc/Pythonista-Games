@@ -14,9 +14,8 @@ COLOR_CODE = {
     0: '⬜️',    # just for the start
 }
 WORD_LENGTH = 5
-LANGUAGE = 'en'
+LANGUAGE = 'de'     # supported languages 2024/09 ["de","fr","it","es","zh"]
 MAX_ATTEMPTS = 10
-
 
 def get_random_word():
     """Get a random 5-letter word via the random-word-api
@@ -33,7 +32,7 @@ def get_random_word():
         DATA = R.json()
         return DATA[0].upper()
     except requests.RequestException as e:
-        print(f"Oops, couldn't fetch a random word: {e}")
+        print(f"Ups, Problem mit der Random-Word-Api : {e}")
         return "ERROR"
 
 def check_guess(secret_word, guess):
@@ -64,21 +63,21 @@ def get_guess(attempt):
         if guess.isalpha() and len(guess) == WORD_LENGTH:
             return guess.upper()
         else:
-            print(f'Only {WORD_LENGTH}-letter words allowed.')
+            print(f'Nur Worte mit {WORD_LENGTH} Buchstaben sind erlaubt.')
 
 def solved(feedback):
     return set(feedback) == {'G'}
 
 def play_again():
     while True:
-        answer = input('Do you wanna play again? [Y]es or [N]o:\t').strip()
+        answer = input('Willst du nochmal spielen? [J]a oder [N]ein:\t').strip()
         if answer.upper() == 'Y':
             return True
         if answer.upper() == 'N':
             return False
 
 if __name__ == "__main__":
-    print('CRACK THE CODE\n')
+    print('KNACK DEN CODE\n')
 
     attempt = 1
     secret_word = get_random_word()
@@ -94,11 +93,11 @@ if __name__ == "__main__":
             print_feedback(feedback)
 
             if solved(feedback):
-                print('You cracked the Code!')
+                print('Du hast den Code geknackt!')
                 round_finished = True
 
             if attempt == MAX_ATTEMPTS:
-                print(f'The secret word is {secret_word}')
+                print(f'Zu schwer? Das Geheimwort lautet {secret_word}')
                 round_finished = True
 
             attempt += 1
@@ -107,7 +106,7 @@ if __name__ == "__main__":
             attempt = 0
             secret_word = get_random_word()
             console.clear()
-            print('CRACK THE CODE\n')
+            print('KNACK DEN CODE\n')
             print_feedback([0]*5)
             round_finished = False
         else:
