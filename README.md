@@ -17,7 +17,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 **Rock Paper Scissors** as a console game for one player. Try to beat the odds in this classic.
 
 ### 5. CodeCracker.py
-**Code Cracker** is a console game for one player. Try to find the random 5-letter word using the colored feedback.
+**Code Cracker** is a console game for one player. Try to find the random 5-letter word using the colored feedback. The secret word is fetched from https://random-word-api.herokuapp.com. Default language is German. Supported languages are ["de","fr","it","es","zh"].
 
 ## Requirements
 
