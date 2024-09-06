@@ -16,6 +16,9 @@ This is a collection of small Python games designed to be played on an iPhone or
 ### 4. RockPaperScissors.py
 **Rock Paper Scissors** as a console game for one player. Try to beat the odds in this classic.
 
+### 5. CodeCracker.py
+**Code Cracker** is a console game for one player. Try to find the random 5-letter word using the colored feedback.
+
 ## Requirements
 
 - Pythonista app (iOS, http://www.omz-software.com/pythonista/ ) 
@@ -29,6 +32,6 @@ This is a collection of small Python games designed to be played on an iPhone or
 ## Why I Built These Games
 
 - **ColorCatcher** was created as a fun way to incorporate movement and keep my back active, turning everyday stretches into a playful experience.
-- **Four in a Row** and **Tic Tac Toe** were built for the nostalgia and as a fun coding excercise.
+- The others were built for the nostalgia and as a fun coding excercise.
 
-Enjoy the games and feel free to contribute, suggest improvements, or simply have fun!
+Enjoy the games!
