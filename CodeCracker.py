@@ -6,6 +6,7 @@
 """
 import requests
 import console
+import unicodedata
 
 COLOR_CODE = {
     'G': '🟩',
@@ -14,7 +15,7 @@ COLOR_CODE = {
     0: '⬜️',    # just for the start
 }
 WORD_LENGTH = 5
-LANGUAGE = 'de'     # supported languages 2024/09 ["de","fr","it","es","zh"]
+LANGUAGE = 'de'     # random-word-api supported languages 2024/09 ["de","fr","it","es","zh"]
 MAX_ATTEMPTS = 10
 
 def get_random_word():
@@ -60,6 +61,10 @@ def print_feedback(feedback):
 def get_guess(attempt):
     while True:
         guess = input(f'{attempt}) \t').strip()
+
+        # normalize so äöü count as 1 letter each
+        guess = unicodedata.normalize('NFC', guess)
+
         if guess.isalpha() and len(guess) == WORD_LENGTH:
             return guess.upper()
         else:
@@ -77,7 +82,7 @@ def play_again():
             return False
 
 if __name__ == "__main__":
-    print('KNACK DEN CODE\n')
+    print(f'KNACK DEN CODE  ({LANGUAGE})\n')
 
     attempt = 1
     secret_word = get_random_word()
@@ -93,11 +98,11 @@ if __name__ == "__main__":
             print_feedback(feedback)
 
             if solved(feedback):
-                print('Du hast den Code geknackt!')
+                print('\nDu hast den Code geknackt!')
                 round_finished = True
 
             if attempt == MAX_ATTEMPTS:
-                print(f'Zu schwer? Das Geheimwort lautet {secret_word}')
+                print(f'\nZu schwer. Das Geheimwort lautet {secret_word}')
                 round_finished = True
 
             attempt += 1
@@ -106,8 +111,10 @@ if __name__ == "__main__":
             attempt = 0
             secret_word = get_random_word()
             console.clear()
-            print('KNACK DEN CODE\n')
+            print(f'KNACK DEN CODE ({LANGUAGE})\n')
             print_feedback([0]*5)
             round_finished = False
         else:
             game_is_on = False
+
+    console.clear()
