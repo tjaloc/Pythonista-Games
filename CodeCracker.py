@@ -76,7 +76,7 @@ def solved(feedback):
 def play_again():
     while True:
         answer = input('Willst du nochmal spielen? [J]a oder [N]ein:\t').strip()
-        if answer.upper() == 'Y':
+        if answer.upper() == 'J':
             return True
         if answer.upper() == 'N':
             return False
