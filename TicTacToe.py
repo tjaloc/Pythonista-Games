@@ -39,8 +39,14 @@ class TicTacToe():
 
     def start(self):
         if self.winner: self.current_player = self.winner # winner starts a rematch
+        if self.current_player == self.player1:
+            self.next_player = self.player2
+        else:
+            self.next_player = self.player1
+
         self.winner = None
-        self.clear_board()
+        self.board = self.clear_board()
+        console.clear()
         self.print_board()
 
 
@@ -73,16 +79,16 @@ class TicTacToe():
 
 
     def print_board(self):
-        print(f"""
-            a   b   c 
-        ──┼───┼───┼───┤   
-        1 | {self.board['a1']} | {self.board['b1']} | {self.board['c1']} |
-        ──┼───┼───┼───┤ 
-        2 | {self.board['a2']} | {self.board['b2']} | {self.board['c2']} |
-        ──┼───┼───┼───┤ 
-        3 | {self.board['a3']} | {self.board['b3']} | {self.board['c3']} |
-        ──┴───┴───┴───┘ 
-        """)
+        print(
+            f"    a   b   c ",
+            f"──┼───┼───┼───┤ ",
+            f"1 | {self.board['a1']} | {self.board['b1']} | {self.board['c1']} |",
+            f"──┼───┼───┼───┤ ",
+            f"2 | {self.board['a2']} | {self.board['b2']} | {self.board['c2']} |",
+            f"──┼───┼───┼───┤ ",
+            f"3 | {self.board['a3']} | {self.board['b3']} | {self.board['c3']} |",
+            f"──┴───┴───┴───┘", sep='\n'
+        )
 
 
     def quit_or_rematch(self):
