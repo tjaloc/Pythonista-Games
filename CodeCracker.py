@@ -1,12 +1,13 @@
 """CODE CRACKER
 
     The Secret word is a random 5-letter word provided by https://random-word-api.herokuapp.com.
-    You have 10 attempts to crack the code. The colored feedback shows whether a letter is at the right spot, wrong spot
+    You have 10 attempts to crack the code. The colored feedback shows if a letter is at the right spot, wrong spot
     but in the secret word or doesn't appear at all.
 """
 import requests
 import console
 import unicodedata
+
 
 COLOR_CODE = {
     'G': '🟩',
@@ -31,6 +32,11 @@ def get_random_word():
         }
         R = S.get(url=URL, params=PARAMS)
         DATA = R.json()
+
+        # avoid 'ß' for it'd become 'ss' and add a 6th letter
+        if 'ẞ' in DATA:
+          DATA = get_random_word()
+
         return DATA[0].upper()
     except requests.RequestException as e:
         print(f"Ups, Problem mit der Random-Word-Api : {e}")
@@ -108,7 +114,7 @@ if __name__ == "__main__":
             attempt += 1
 
         if play_again():
-            attempt = 0
+            attempt = 1
             secret_word = get_random_word()
             console.clear()
             print(f'KNACK DEN CODE ({LANGUAGE})\n')
