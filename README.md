@@ -7,6 +7,8 @@ This is a collection of small Python games designed to be played on an iPhone or
 ### 1. ColorCatcher.py
 **ColorCatcher** is an interactive game where you use the motion sensors of your phone or tablet to match a target HSV color. The X, Y, and Z axis movements correspond to different values in the HSV color model. I designed this game to encourage playful movement and keep my back active with big movement using arm and upper body. You can be "efficient" and only move your hand but that's less fun and less benefits. It's a simple but engaging way to add a bit of physical activity to your day!
 
+![ Color Catcher](Screenshots/ColorCatcher.gif)
+
 ### 2. FourInARow.py
 **Four in a Row** (also known as Connect Four) is a classic two-player console game. Players take turns dropping their tokens into a grid, aiming to connect four tokens in a row, either horizontally, vertically, or diagonally. The game is fully playable in the Python console. Feel free to change the board size.
 
