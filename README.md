@@ -29,6 +29,16 @@ This is a collection of small Python games designed to be played on an iPhone or
 
 ![ Knack den Code - console game](Screenshots/CodeCracker.jpg)
 
+### 6. 2048.py
+**2048** for iPhone and iPad. 2048 is a simple puzzle game. Swipe right, left, up and down to move all tiles.
+Tiles with the same number merge into one, doubling their value and a new tile (2 or 4) appears
+randomly in an empty spot on the grid. You win when you reach 2048. You lose when there are no
+more valid moves.
+
+I added a subtle sound to the moves. You can mute it in the upper left corner.
+
+![ 2048 on iPhone ](Screenshots/2048_iPhone.PNG) ![ 2048 on iPad](Screenshots/2048_iPad.PNG)
+
 ## Requirements
 
 - Pythonista app (iOS, http://www.omz-software.com/pythonista/ ) 
