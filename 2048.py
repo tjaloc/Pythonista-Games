@@ -67,7 +67,7 @@ class Game(Scene):
         self.gap = int(0.04 * self.matrix)
         self.border_radius = int(0.02 * self.matrix)
         self.menu_w = self.square * 6
-        self.menu_h = self.square * 4
+        self.menu_h = self.square * 3
         self.font_size = 35 if shorter_side > BREAKPOINT else 20
     
     def create_menu(self):
@@ -78,6 +78,7 @@ class Game(Scene):
             position=(self.center_x, self.center_y),
             parent=self
         )
+        
         self.menu_label = LabelNode(
             'Game Over', 
             font=(FONT, self.font_size * 2), 
@@ -86,27 +87,28 @@ class Game(Scene):
             position=(0, self.menu_h // 4),
             parent=menu
         )
+        
         self.play_btn = self.create_button(
             parent=menu, 
             text='Play again',
             position=(self.menu_w // 4, -self.menu_h // 4),
             width=int(self.square * 2.5), 
             height=self.square
-        )
+            )
         self.quit_btn = self.create_button(
             parent=menu, 
             text='Quit',
             position=(-self.menu_w // 4, -self.menu_h // 4),
             width=int(self.square * 2.5), 
             height=self.square
-        )
+            )
         
         return menu
     
     def create_button(self, parent, text, position, width, height):
         btn = ShapeNode(
             path=ui.Path.rounded_rect(0, 0, width, height, self.border_radius),
-            fill_color=DARK, #BTN_COLOR,
+            fill_color=DARK,
             position=position,
             parent=parent
         )
@@ -114,7 +116,7 @@ class Game(Scene):
         LabelNode(
             text,
             font=(FONT, self.font_size),
-            color=BRIGHT, #DARK,
+            color=BRIGHT,
             alpha=1,
             parent=btn
         )
@@ -147,27 +149,29 @@ class Game(Scene):
             
             # store tile and label in dict to reference
             self.tiles[(r, c)] = {'tile': tile, 'label': label}
-    
-    def pad(self, sequence):
-        return sequence + [0] * (4 - len(sequence))
-    
+
     def collapse(self, sequence):
-        # shift tiles to side
-        seq = self.pad([num for num in sequence if num > 0])
-        
-        # sum equal neighbors
-        i = 0
-        new_seq = []
-        while i < 4:
-            if i < 3 and seq[i] == seq[i+1]:
-                new_seq.append(sum(seq[i:i+2]))
-                i += 2
+        # remove zeros
+        sequence = [num for num in sequence if num > 0]
+        seq = []
+
+        # check and remove
+        while sequence:
+            if len(sequence) == 1:
+                # last item
+                seq.append(sequence[0])
+                sequence = []
+            elif sequence[0] == sequence[1]:
+                # merge equal numbers
+                seq.append(sequence[0] + sequence[1])
+                sequence = sequence[2:]
             else:
-                new_seq.append(seq[i])
-                i += 1
-        
-        return self.pad(new_seq)
-                
+                seq.append(sequence[0])
+                sequence = sequence[1:]
+
+        # pad with zeros
+        return seq + [0] * (4 - len(seq))
+
     def swipe_direction(self, touch_start, touch_end):
         xd, yd = np.subtract(touch_end, touch_start)
         return (
@@ -220,7 +224,7 @@ class Game(Scene):
         if self.game_over:
             return
         
-        # Update all tiles and labels
+        # Update tiles and labels
         for (r, c), nodes in self.tiles.items():
             num = self.board[r, c]
             nodes['tile'].fill_color = self.get_color(num)
@@ -233,9 +237,11 @@ class Game(Scene):
             self.game_over = True
             
     def no_more_moves(self):
+        # look for empty tiles
         if 0 in self.board:
             return False
         
+        # look for equal neighbors
         for i in range(4*4):
             r, c = divmod(i, 4)
             current = self.board[r, c]
@@ -267,7 +273,7 @@ class Game(Scene):
             self.mute = not self.mute
             self.mute_toggle.texture = Texture(['typb:Unmute', 'typb:Mute'][self.mute])
         
-        # game over menue
+        # game over menu
         if self.game_over:
             if self.touched_node(self.quit_btn, touch.location):
                 self.quit_game()
