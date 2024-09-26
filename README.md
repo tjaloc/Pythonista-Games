@@ -8,7 +8,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 **Photo slider puzzle** is the digital recreation of the old small plastic puzzles used to keep the kids occupied when traveling. You can shift one tile at a time by tapping it. Feel free to increase the puzzle size (tile amount).
 
 This game uses the Scene-Module and will work on iPhone and iPad.
-![ Photo Slider Puzzle](photo_slider_puzzle.jpeg)
+![ Photo Slider Puzzle](Screenshots/photo_slider_puzzle.jpeg)
 
 ### 2. ColorCatcher.py
 **ColorCatcher** is an interactive game where you use the motion sensors of your phone or tablet to match a target HSV color. The X, Y, and Z axis movements correspond to different values in the HSV color model. I designed this game to encourage playful movement and keep my back active with big movement using arm and upper body. You can be "efficient" and only move your hand but that's less fun and less benefits. It's a simple but engaging way to add a bit of physical activity to your day!
