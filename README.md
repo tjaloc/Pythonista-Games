@@ -8,6 +8,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 **Photo slider puzzle** is the digital recreation of the old small plastic puzzles used to keep the kids occupied when traveling. You can shift one tile at a time by tapping it. Feel free to increase the puzzle size (tile amount). Each refresh a new picture is fetched from [picsum](https://picsum.photos)
 
 This game uses the Scene-Module and will work on iPhone and iPad.
+
 ![ Photo Slider Puzzle](Screenshots/Photo_slider_puzzle.gif)
 
 ### 2. ColorCatcher.py
