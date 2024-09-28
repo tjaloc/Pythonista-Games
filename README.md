@@ -9,7 +9,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 
 This game uses the Scene-Module and will work on iPhone and iPad.
 
-![ Photo Slider Puzzle](Screenshots/Photo_slider_puzzle.gif)
+![ Photo Slider Puzzle](Screenshots/PhotoSliderPuzzle.gif)
 
 ### 2. ColorCatcher.py
 **ColorCatcher** is an interactive game where you use the motion sensors of your phone or tablet to match a target HSV color. The X, Y, and Z axis movements correspond to different values in the HSV color model. I designed this game to encourage playful movement and keep my back active with big movement using arm and upper body. You can be "efficient" and only move your hand but that's less fun and less benefits. It's a simple but engaging way to add a bit of physical activity to your day!
