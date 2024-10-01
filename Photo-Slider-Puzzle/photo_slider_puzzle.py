@@ -11,12 +11,9 @@ import os
 import glob
 
 
-DARK = '#303030'
-LIGHT = '#ffffff'
 BORDER_W = 20 if min(get_screen_size()) >= 600 else 10 # breakpoint for iPad/iPhone
 MIN, MAX = 3, 8
 BOARD_SIZE = MIN
-FONT = ('<System-Bold>', 20)
 IMG_DIR = 'img'
 
 class Puzzle(Scene):
@@ -27,16 +24,15 @@ class Puzzle(Scene):
         self.muted = False
 
         # Dimensions
-        self.w, self.h = get_screen_size()
-        self.puzzle_w = int(min(self.w, self.h) - 4 * BORDER_W)
-        self.calc_tile_sizes_and_start_xy()
+        self.set_dimensions()
         
         # Elements
         self.root_node = Node(parent=self)
-        self.background_color = DARK
-        self.puzzle_frame = ShapeNode(
+        self.background_color = '#303030'
+
+        self.puzzle = ShapeNode(
             parent=self.root_node,
-            fill_color=LIGHT,
+            fill_color='white',
             position=get_screen_size()/2,
             path=ui.Path.rounded_rect(
                 0, 0,
@@ -79,14 +75,15 @@ class Puzzle(Scene):
 
         self.new_puzzle()
 
-    def calc_tile_sizes_and_start_xy(self):
+    def set_dimensions(self):
+        self.w, self.h = get_screen_size()
+        self.puzzle_w = int(min(self.w, self.h) - 4 * BORDER_W)
         self.tile_w = self.puzzle_w // BOARD_SIZE
         self.start_x = - BOARD_SIZE/2 * self.tile_w + self.tile_w/2
         self.start_y = BOARD_SIZE/2 * self.tile_w - self.tile_w/2
         
     def get_image(self):
         """Download photo from https://picsum.photos, slice it to tile size.
-        Create tile nodes and store as property tile_list.
         """
         r = requests.get(f'https://picsum.photos/{self.puzzle_w}/{self.puzzle_w}?greyscale')
         if r.status_code == 200:
@@ -104,7 +101,7 @@ class Puzzle(Scene):
 
                     texture = img.crop((x0, y0, x1, y1))
 
-                    # set random names to avoid img drawn from memory after refresh aka alway new image
+                    # random names to avoid img drawn from memory after refresh -> always new image
                     texture_filename = f'{random.randint(1,1_000_000):0>7}.png'
                     if not os.path.exists('img'):
                       os.mkdir('img')
@@ -115,9 +112,9 @@ class Puzzle(Scene):
                     tile = ShapeNode(
                         path=rect,
                         fill_color=None,
-                        stroke_color=LIGHT,
-                        parent=self.puzzle_frame,
-                        alpha=nr > 0, # tile 0 is empty / invisible with alpha = 0
+                        stroke_color='white',
+                        parent=self.puzzle,
+                        alpha=nr > 0, # tile 0 is empty with alpha = 0
                         position=(self.tile_w/2, self.tile_w/2),
                         )
                         
@@ -127,7 +124,6 @@ class Puzzle(Scene):
                         blend_mode=ui.BLEND_MULTIPLY, # crops rounded corners of image
                         )
                     tile.cell = nr
-                    self.tile_list.append(tile)
         
     def shuffle_puzzle(self):
         """ Perform moves to shuffle the board.
@@ -136,7 +132,7 @@ class Puzzle(Scene):
         neighbours = [ +1, -1, + BOARD_SIZE, - BOARD_SIZE]
         for _ in range(BOARD_SIZE ** 2 * 2):
             neighbour = random.choice(
-                [tile for tile in self.tile_list if any(
+                [tile for tile in self.puzzle.children if any(
                     tile.cell + n == self.zero.cell for n in neighbours)])
             self.zero.cell, neighbour.cell = neighbour.cell, self.zero.cell
             
@@ -144,7 +140,7 @@ class Puzzle(Scene):
         """Place tiles on board.
         Starting point is top left.
         """
-        for tile in self.tile_list:
+        for tile in self.puzzle.children:
             r, c = divmod(tile.cell, BOARD_SIZE)
             x = self.start_x + c * self.tile_w
             y = self.start_y - r * self.tile_w
@@ -153,8 +149,8 @@ class Puzzle(Scene):
     def touched_tile(self, touch):
         """Match touch location to tiles and return tile (node).
         """
-        for nr, tile in enumerate(self.tile_list):
-            xy = self.puzzle_frame.point_from_scene(touch.location)
+        for nr, tile in enumerate(self.puzzle.children):
+            xy = self.puzzle.point_from_scene(touch.location)
             if tile.frame.contains_point(xy):
                 return tile
             
@@ -167,38 +163,36 @@ class Puzzle(Scene):
         more_tiles_btn:     increase amount of tiles
         """
         global BOARD_SIZE
-        
+
         # more tiles
         if BOARD_SIZE < MAX and self.more_tiles_btn.frame.contains_point(touch.location):
           BOARD_SIZE += 1
           if not self.muted:
             sound.play_effect('8ve:8ve-tap-hollow')
-          self.refresh()
+          self.new_puzzle()
 
         # less tiles
         if BOARD_SIZE > MIN and self.less_tiles_btn.frame.contains_point(touch.location):
           BOARD_SIZE -= 1
           if not self.muted:
             sound.play_effect('8ve:8ve-tap-hollow')
-          self.refresh()
+          self.new_puzzle()
 
         # mute toggle
         if self.mute_btn.frame.contains_point(touch.location):
             self.muted = not self.muted
-            self.mute_btn.texture = Texture('typw:Unmute') if self.muted else Texture('typw:Mute')
+            self.mute_btn.texture = [Texture('typw:Mute'),Texture('typw:Unmute') ][self.muted]
             return
             
         # refresh
         if self.new_puzzle_btn.frame.contains_point(touch.location):
-            self.refresh()
+            self.new_puzzle()
             return
             
-        # shift tile into empty cell
+        # shift tile to empty cell
         tile = self.touched_tile(touch)
         if tile and self.is_neighbour(tile) and not self.solved:
             self.zero.cell, tile.cell = tile.cell, self.zero.cell
-            self.place_tiles()
-            self.move_counter += 1
             
             if not self.muted: sound.play_effect('8ve:8ve-tap-hollow')
             return
@@ -209,58 +203,44 @@ class Puzzle(Scene):
         return any([
             tile.cell == self.zero.cell + 1, 
             tile.cell == self.zero.cell - 1, 
-            tile.cell == self.zero.cell + BOARD_SIZE, 
+            tile.cell == self.zero.cell + BOARD_SIZE,
             tile.cell == self.zero.cell - BOARD_SIZE
             ])
         
     def update(self):
         """update Scene if game is initialized.
-        Stop game if puzzle is solved.
+        Stop game when puzzle is solved.
         """
         if not self.initialized:
             return
         
         self.place_tiles()
-        
-        if self.puzzle_solved():
-            for tile in self.tile_list:
-                tile.alpha = 1
-            self.solved = True
+        self.zero.alpha = self.solved = self.puzzle_solved()
     
     def puzzle_solved(self):
         """Return True if all tiles are in their original cell"""
-        return all(i == tile.cell for i, tile in enumerate(self.tile_list))
-        
-    def refresh(self):
-        """ Remove tile nodes from parent to avoid duplicates, old tiles in new game.
-        """
-        for tile in self.tile_list:
-            tile.remove_from_parent()
-        self.new_puzzle()
+        return all(i == tile.cell for i, tile in enumerate(self.puzzle.children))
             
     def new_puzzle(self):
         """Set up for new game. Delete old stuff. Reset all status, create, shuffle and place new tiles
         """
+        for tile in self.puzzle.children:
+            tile.remove_from_parent()
 
-        # delete old textures
+        # delete old texture files
         textures = glob.glob(os.path.join('img', '*[0-9].png'))
         for texture in textures:
             os.remove(texture)
             
-        self.calc_tile_sizes_and_start_xy()
-
-        self.tile_list = []
-        self.current = None
-        self.touch_start = None
-        self.move_counter = 0
+        self.set_dimensions()
         self.get_image()
-        self.zero = self.tile_list[0]
+        self.zero = self.puzzle.children[0]
         self.shuffle_puzzle()
         self.place_tiles()
 
         # fade out tile count buttons
-        self.less_tiles_btn.alpha = 0.05 if BOARD_SIZE == MIN else .2
-        self.more_tiles_btn.alpha = 0.05 if BOARD_SIZE == MAX else .2
+        self.less_tiles_btn.alpha = [.2, .05][BOARD_SIZE == MIN]
+        self.more_tiles_btn.alpha = [.2, .05][BOARD_SIZE == MAX]
 
         self.solved = False
         self.initialized = True
