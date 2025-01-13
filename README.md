@@ -12,7 +12,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 1. [Rock Paper Scissors](#rock-paper-scissors)
 1. [Code Cracker](#code-cracker)
 1. [2048](#2048)
-1. [The Simpsons Quiz](#the-impsons-quiz)
+1. [The Simpsons Quiz](#the-simpsons-quiz)
 
 ### Miscellaneous
 - [Requirements](#requirements)
