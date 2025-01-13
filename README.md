@@ -10,6 +10,7 @@ This is a collection of small Python games designed to be played on an iPhone or
 1. [Rock Paper Scissors](#rock-paper-scissors)
 1. [Code Cracker](#code-cracker)
 1. [2048](#2048)
+1. [The Simpsons Quiz](#the-simpson-quiz)
 
 ---
    
@@ -54,6 +55,13 @@ more valid moves.
 I added a subtle sound to the moves. You can mute it in the upper left corner.
 
 ![ 2048 on iPhone ](Screenshots/2048_iPhone.PNG) ![ 2048 on iPad](Screenshots/2048_iPad.PNG)
+
+## The Simpsons Quiz
+This is a simple console quiz with quotes from *The Simpsons*. Guess who said it.
+
+The quotes, answers and images are provided by [The Simpsons Quote API](http://thesimpsonsquoteapi.glitch.me). 
+
+![Simpson Quiz](Screenshots/SimpsonsQuiz.jpg)
 
 ### Requirements
 
