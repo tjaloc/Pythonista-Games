@@ -3,13 +3,13 @@
 This is a collection of small Python games designed to be played on an iPhone or iPad using the Pythonista app.
 
 ### Games Included
-1. [Photo Slider Puzzle] (photo-slider-puzzle)
-1. [Color Catcher] (color-catcher)
-1. [Four In ARow] (four-in-arow)
-1. [Tic-Tac-Toe] (tic-tac-toe)
-1. [Rock Paper Scissors] (rock-paper-scissors)
-1. [Code Cracker] (code-cracker)
-1. [2048] (2048)
+1. [Photo Slider Puzzle] (#photo-slider-puzzle)
+1. [Color Catcher] (#color-catcher)
+1. [Four In ARow] (#four-in-arow)
+1. [Tic-Tac-Toe] (#tic-tac-toe)
+1. [Rock Paper Scissors] (#rock-paper-scissors)
+1. [Code Cracker] (#code-cracker)
+1. [2048] (#2048)
 
 ---
    
